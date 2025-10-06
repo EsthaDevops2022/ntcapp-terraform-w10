@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - '**.tf'
+      - '**.sh'
+      - '!.github/workflows/terraformCI.yml'
   pull_request:
     paths:
       - '**.tf'
