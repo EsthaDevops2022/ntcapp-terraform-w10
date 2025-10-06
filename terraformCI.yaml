@@ -1,0 +1,52 @@
+name: Terraform CI with Terrascan
+
+on:
+  push:
+    paths:
+      - '**.tf'
+  pull_request:
+    paths:
+      - '**.tf'
+
+jobs:
+  terraform:
+    name: Terraform Format, Validate, Plan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 4.61.0  # Specify the desired Terraform version
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan
+
+  terrascan:
+    name: Terrascan Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Terrascan
+        run: |
+          curl -L https://github.com/tenable/terrascan/releases/latest/download/terrascan_Linux_x86_64.tar.gz -o terrascan.tar.gz
+          tar -xvzf terrascan.tar.gz
+          sudo mv terrascan /usr/local/bin/
+
+      - name: Run Terrascan
+        run: terrascan scan -t terraform -i terraform --non-recursive
