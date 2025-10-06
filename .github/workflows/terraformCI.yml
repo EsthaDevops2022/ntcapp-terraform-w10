@@ -36,6 +36,10 @@ jobs:
       - name: Terraform Plan
         run: terraform plan
 
+      - name: Save Plan Output
+        if: success()
+        run: terraform plan -out=tfplan.binary  
+
   terrascan:
     name: Terrascan Security Scan
     runs-on: ubuntu-latest
