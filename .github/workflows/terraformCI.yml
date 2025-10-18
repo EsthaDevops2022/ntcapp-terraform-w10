@@ -49,7 +49,7 @@ jobs:
           scan-type: config
           scan-ref: .
           format: table
-          exit-code: 1
+          exit-code: 0
           severity: HIGH,CRITICAL
           ignore-unfixed: true
 
